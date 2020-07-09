@@ -1,0 +1,13 @@
+version: "3.3"            # 表示使用docker-compose.yml的Version 2 file format编写
+services:
+  consumer-movie-ribbon:     # 默认情况下，其它服务可以使用服务名称links到该服务
+    image: microservice-consumer-movie-ribbon:latest
+    container_name: consumer-movie-ribbon
+    hostname: movie
+    restart: always
+    ports:
+      - 8010:8010
+    environment:
+      - spring.profiles.active=consumer1
+    volumes:
+      - /host_mnt/d/export/:/export/

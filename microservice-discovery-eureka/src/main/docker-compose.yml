@@ -1,0 +1,39 @@
+version: "3.3"            # 表示使用docker-compose.yml的Version 2 file format编写
+services:
+  eureka-server-ha1:     # 默认情况下，其它服务可以使用服务名称links到该服务
+    image: microservice-discovery-eureka:latest
+    container_name: eureka-server-ha1
+    hostname: peer1
+    restart: always
+    networks:
+      - eureka-net
+    ports:
+      - 8761:8761
+    environment:
+      - spring.profiles.active=peer1
+      - eureka.instance.ip-address=192.168.96.1
+    volumes:
+      - /host_mnt/d/export/:/export/
+    extra_hosts:
+      peer1: 192.168.96.1
+      peer2: 192.168.96.1
+  eureka-server-ha2:
+    image: microservice-discovery-eureka:latest
+    container_name: eureka-server-ha2
+    hostname: peer2
+    restart: always
+    networks:
+      - eureka-net
+    ports:
+      - 8762:8762
+    environment:
+      - spring.profiles.active=peer2
+      - eureka.instance.ip-address=192.168.96.1
+    volumes:
+      - /host_mnt/d/export/:/export/
+    extra_hosts:
+      peer1: 192.168.96.1
+      peer2: 192.168.96.1
+networks:
+  eureka-net:
+    driver: bridge

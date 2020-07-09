@@ -1,0 +1,11 @@
+version: "3.3"            # 表示使用docker-compose.yml的Version 2 file format编写
+services:
+  hystrix-dashboard:     # 默认情况下，其它服务可以使用服务名称links到该服务
+    image: microservice-hystrix-dashboard:latest
+    container_name: hystrix-dashboard
+    hostname: hystrix
+    restart: always
+    ports:
+      - 8030:8030
+    volumes:
+      - /host_mnt/d/export/:/export/

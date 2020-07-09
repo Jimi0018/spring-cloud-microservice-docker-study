@@ -1,0 +1,13 @@
+version: "3.3"            # 表示使用docker-compose.yml的Version 2 file format编写
+services:
+  consumer-movie-feign-with-hystrix:     # 默认情况下，其它服务可以使用服务名称links到该服务
+    image: microservice-consumer-movie-feign-with-hystrix:latest
+    container_name: consumer-movie-feign-with-hystrix
+    hostname: movie
+    restart: always
+    ports:
+      - 8025:8025
+    environment:
+      - spring.profiles.active=consumer1
+    volumes:
+      - /host_mnt/d/export/:/export/

@@ -1,0 +1,39 @@
+version: "3.3"            # 表示使用docker-compose.yml的Version 2 file format编写
+services:
+  provider-user-ha1:     # 默认情况下，其它服务可以使用服务名称links到该服务
+    image: microservice-provider-user:latest
+    container_name: provider-user-ha1
+    hostname: provider1
+    restart: always
+    networks:
+      - provider-net
+    ports:
+      - 8000:8000
+    environment:
+      - spring.profiles.active=provider1
+      - eureka.instance.ip-address=192.168.96.1
+    volumes:
+      - /host_mnt/d/export/:/export/
+    extra_hosts:
+      provider1: 192.168.96.1
+      provider2: 192.168.96.1
+  provider-user-ha2:
+    image: microservice-provider-user:latest
+    container_name: provider-user-ha2
+    hostname: provider2
+    restart: always
+    networks:
+      - provider-net
+    ports:
+      - 8001:8001
+    environment:
+      - spring.profiles.active=provider2
+      - eureka.instance.ip-address=192.168.96.1
+    volumes:
+      - /host_mnt/d/export/:/export/
+    extra_hosts:
+      provider1: 192.168.96.1
+      provider2: 192.168.96.1
+networks:
+  provider-net:
+    driver: bridge

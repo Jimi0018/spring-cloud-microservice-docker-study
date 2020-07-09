@@ -1,0 +1,13 @@
+version: "3.3"            # 表示使用docker-compose.yml的Version 2 file format编写
+services:
+  api-gateway:     # 默认情况下，其它服务可以使用服务名称links到该服务
+    image: microservice-api-gateway:latest
+    container_name: api-gateway
+    hostname: gateway
+    restart: always
+    ports:
+      - 8050:8050
+    environment:
+      - eureka.instance.ip-address=192.168.96.1
+    volumes:
+      - /host_mnt/d/export/:/export/

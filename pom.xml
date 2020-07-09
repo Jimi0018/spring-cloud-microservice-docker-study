@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.example.eric.cloud</groupId>
+    <artifactId>spring-cloud-microservice-docker-study</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>spring-cloud-microservice-docker-study</name>
+    <packaging>pom</packaging>
+    <modules>
+        <module>microservice-discovery-eureka</module>
+        <module>microservice-provider-user</module>
+        <module>microservice-consumer-movie-ribbon</module>
+        <module>microservice-consumer-movie-feign</module>
+        <module>microservice-consumer-movie-ribbon-with-hystrix</module>
+        <module>microservice-consumer-movie-feign-with-hystrix</module>
+        <module>microservice-hystrix-dashboard</module>
+        <module>microservice-consumer-movie-feign-with-hystrix-stream</module>
+        <module>microservice-hystrix-turbine</module>
+<!--        <module>microservice-config-server</module>-->
+<!--        <module>microservice-config-client</module>-->
+<!--        <module>microservice-config-server-eureka</module>-->
+<!--        <module>microservice-config-client-eureka</module>-->
+        <module>microservice-api-gateway</module>
+    </modules>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <spring-boot.version>2.2.0.RELEASE</spring-boot.version>
+        <spring-cloud.version>Hoxton.SR6</spring-cloud.version>
+        <mysql.version>5.1.20</mysql.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- 私有仓库配置，需要settings.xml文件配合serverId对应的仓库服务 账号密码 -->
+        <docker.serverId>local_docker</docker.serverId>
+        <docker.registry>localhost:5000</docker.registry>
+        <docker.host>http://localhost:2375</docker.host>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.example.eric.cloud</groupId>
+                <artifactId>microservice-discovery-eureka</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.example.eric.cloud</groupId>
+                <artifactId>microservice-provider-user</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.example.eric.cloud</groupId>
+                <artifactId>microservice-consumer-movie-ribbon</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.example.eric.cloud</groupId>
+                <artifactId>microservice-consumer-movie-feign</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.example.eric.cloud</groupId>
+                <artifactId>microservice-consumer-movie-ribbon-with-hystrix</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.example.eric.cloud</groupId>
+                <artifactId>microservice-consumer-movie-feign-with-hystrix</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.example.eric.cloud</groupId>
+                <artifactId>microservice-hystrix-dashboard</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.example.eric.cloud</groupId>
+                <artifactId>microservice-consumer-movie-feign-with-hystrix-stream</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.example.eric.cloud</groupId>
+                <artifactId>microservice-hystrix-turbine</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!--            <dependency>-->
+            <!--                <groupId>com.example.eric.cloud</groupId>-->
+            <!--                <artifactId>microservice-config-server</artifactId>-->
+            <!--                <version>${project.version}</version>-->
+            <!--            </dependency>-->
+            <!--            <dependency>-->
+            <!--                <groupId>com.example.eric.cloud</groupId>-->
+            <!--                <artifactId>microservice-config-client</artifactId>-->
+            <!--                <version>${project.version}</version>-->
+            <!--            </dependency>-->
+            <!--            <dependency>-->
+            <!--                <groupId>com.example.eric.cloud</groupId>-->
+            <!--                <artifactId>microservice-config-server-eureka</artifactId>-->
+            <!--                <version>${project.version}</version>-->
+            <!--            </dependency>-->
+            <!--            <dependency>-->
+            <!--                <groupId>com.example.eric.cloud</groupId>-->
+            <!--                <artifactId>microservice-config-client-eureka</artifactId>-->
+            <!--                <version>${project.version}</version>-->
+            <!--            </dependency>-->
+            <dependency>
+                <groupId>com.example.eric.cloud</groupId>
+                <artifactId>microservice-api-gateway</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--打包后 复制jar包到指定文件目录-->
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <!-- here the phase you need -->
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <!-- 复制资源后的输出目录 -->
+                            <outputDirectory>target</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/docker</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.3</version>
+                <configuration>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <showWarnings>true</showWarnings>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
